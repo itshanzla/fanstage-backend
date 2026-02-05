@@ -154,6 +154,32 @@
         }
       }
     }
+    ,
+    "/api/auth/send-otp": {
+      "post": {
+        "summary": "Send OTP",
+        "tags": ["Auth"],
+        "description": "Send a 4-digit OTP to email for verification or password reset.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {
@@ -270,6 +296,23 @@
           },
           "user": {
             "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "SendOtpRequest": {
+        "type": "object",
+        "required": ["email", "type"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "jane@example.com"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["email-verification", "password-verification"],
+            "example": "email-verification",
+            "description": "Use 'email-verification' for email verification, or 'password-verification' for password reset."
           }
         }
       }

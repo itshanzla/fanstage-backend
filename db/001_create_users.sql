@@ -33,3 +33,14 @@ UPDATE users SET email = lower(email);
 
 ALTER TABLE users
   ADD COLUMN IF NOT EXISTS token_version INTEGER NOT NULL DEFAULT 0;
+
+CREATE TABLE IF NOT EXISTS otp_codes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('email-verification', 'password-verification')),
+  code_hash TEXT NOT NULL,
+  expires_at TIMESTAMPTZ NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_otp_codes_email_type ON otp_codes (email, type);
