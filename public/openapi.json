@@ -9,6 +9,10 @@
     {
       "name": "Auth",
       "description": "User & authentication"
+    },
+    {
+      "name": "Health",
+      "description": "Service health checks"
     }
   ],
   "servers": [
@@ -228,6 +232,19 @@
           },
           "400": {
             "description": "Invalid or expired OTP"
+          }
+        }
+      }
+    }
+    ,
+    "/api/health": {
+      "get": {
+        "summary": "Service health",
+        "tags": ["Health"],
+        "description": "Health check that includes database connectivity.",
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
