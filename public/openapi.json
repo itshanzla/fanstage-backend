@@ -180,6 +180,32 @@
         }
       }
     }
+    ,
+    "/api/auth/verify-otp": {
+      "post": {
+        "summary": "Verify OTP",
+        "tags": ["Auth"],
+        "description": "Verify the OTP and update email verification status if needed.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid or expired OTP"
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {
@@ -310,9 +336,29 @@
           },
           "type": {
             "type": "string",
-            "enum": ["email-verification", "password-verification"],
-            "example": "email-verification",
-            "description": "Use 'email-verification' for email verification, or 'password-verification' for password reset."
+            "enum": ["email_verification", "password_verification"],
+            "example": "email_verification",
+            "description": "Use 'email_verification' for email verification, or 'password_verification' for password reset."
+          }
+        }
+      },
+      "VerifyOtpRequest": {
+        "type": "object",
+        "required": ["email", "otp", "type"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "rafay@example.com"
+          },
+          "otp": {
+            "type": "string",
+            "example": "1234"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["email_verification", "password_verification"],
+            "example": "email_verification"
           }
         }
       }

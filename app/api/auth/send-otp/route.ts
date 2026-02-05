@@ -12,8 +12,20 @@ type SendOtpBody = {
   type?: OtpType;
 };
 
-function isOtpType(value: string): value is OtpType {
-  return value === "email-verification" || value === "password-verification";
+function normalizeOtpType(value?: string): OtpType | null {
+  if (!value) {
+    return null;
+  }
+
+  if (value === "email-verification" || value === "email_verification") {
+    return "email-verification";
+  }
+
+  if (value === "password-verification" || value === "password_verification") {
+    return "password-verification";
+  }
+
+  return null;
 }
 
 function getExpiryMinutes() {
@@ -25,7 +37,7 @@ function getExpiryMinutes() {
 export async function POST(req: Request) {
   const body = (await req.json()) as SendOtpBody;
   const email = body.email?.trim().toLowerCase();
-  const type = body.type;
+  const type = normalizeOtpType(body.type);
 
   if (!email || !type) {
     return NextResponse.json(
@@ -34,7 +46,7 @@ export async function POST(req: Request) {
     );
   }
 
-  if (!isOtpType(type)) {
+  if (!type) {
     return NextResponse.json(
       { status: "error", message: "Invalid OTP type." },
       { status: 400 }
