@@ -206,6 +206,32 @@
         }
       }
     }
+    ,
+    "/api/auth/reset-password": {
+      "post": {
+        "summary": "Reset password",
+        "tags": ["Auth"],
+        "description": "Verify OTP and reset the user's password.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid or expired OTP"
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {
@@ -359,6 +385,32 @@
             "type": "string",
             "enum": ["email_verification", "password_verification"],
             "example": "email_verification"
+          }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "required": ["email", "otp", "newPassword"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "rafay@example.com"
+          },
+          "otp": {
+            "type": "string",
+            "example": "1234"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["password_verification"],
+            "example": "password_verification",
+            "description": "Use 'password_verification' for password reset."
+          },
+          "newPassword": {
+            "type": "string",
+            "format": "password",
+            "example": "NewStrongPass123!"
           }
         }
       }
