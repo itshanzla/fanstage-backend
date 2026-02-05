@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   }
 
   const result = await pool.query<AuthUserWithPassword>(
-    `SELECT id, name, email, role, account_type, account_status, email_verified, profile_complete, password_hash
+    `SELECT id, name, email, role, account_type, account_status, email_verified, profile_complete, token_version, password_hash
      FROM users
      WHERE email = $1
      LIMIT 1`,
@@ -48,10 +48,19 @@ export async function POST(req: Request) {
     );
   }
 
-  const token = signToken(user);
+  const updated = await pool.query<AuthUser>(
+    `UPDATE users
+     SET token_version = token_version + 1
+     WHERE id = $1
+     RETURNING id, name, email, role, account_type, account_status, email_verified, profile_complete, token_version`,
+    [user.id]
+  );
+
+  const freshUser = updated.rows[0];
+  const token = signToken(freshUser);
 
   return NextResponse.json(
-    { status: "success", token, user: toUserResponse(user) },
+    { status: "success", token, user: toUserResponse(freshUser) },
     { status: 200 }
   );
 }

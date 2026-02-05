@@ -117,6 +117,43 @@
         }
       }
     }
+    ,
+    "/api/auth/me": {
+      "get": {
+        "summary": "Get current user",
+        "tags": ["Auth"],
+        "description": "Return the authenticated user from the access token.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {

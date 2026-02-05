@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       `INSERT INTO users
         (name, email, password_hash, role, account_type, account_status, email_verified, profile_complete)
        VALUES ($1, $2, $3, 'user', $4, $5, $6, $7)
-       RETURNING id, name, email, role, account_type, account_status, email_verified, profile_complete`,
+       RETURNING id, name, email, role, account_type, account_status, email_verified, profile_complete, token_version`,
       [
         name,
         email,

@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
   account_status BOOLEAN NOT NULL DEFAULT TRUE,
   email_verified BOOLEAN NOT NULL DEFAULT FALSE,
   profile_complete BOOLEAN NOT NULL DEFAULT FALSE,
+  token_version INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -29,3 +30,6 @@ FOR EACH ROW
 EXECUTE FUNCTION users_lowercase_email();
 
 UPDATE users SET email = lower(email);
+
+ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS token_version INTEGER NOT NULL DEFAULT 0;
