@@ -335,6 +335,66 @@
         }
       }
     }
+    ,
+    "/api/auth/social": {
+      "post": {
+        "summary": "Social login",
+        "tags": ["Auth"],
+        "description": "Login or register using Google or Apple idToken.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SocialLoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "components": {
     "schemas": {
@@ -527,6 +587,21 @@
           "message": {
             "type": "string",
             "example": "Invalid or expired OTP."
+          }
+        }
+      },
+      "SocialLoginRequest": {
+        "type": "object",
+        "required": ["provider", "idToken"],
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": ["google", "apple"],
+            "example": "google"
+          },
+          "idToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJSUzI1NiIsImtpZCI6..."
           }
         }
       }
